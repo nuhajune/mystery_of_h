@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Mystery of h - SBED Lab</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f3f4f6;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background-color: #3b82f6;
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+        .hot-surface {
+            background: linear-gradient(to right, #ef4444, #f97316);
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        .h-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #7c3aed;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body class="p-6">
+    <div id="app" class="w-full max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+        <!-- Header with logo and name -->
+        <div class="flex items-center justify-between mb-6 pb-4 border-b-2 border-gray-200">
+            <div class="flex-1">
+                <h1 class="text-3xl font-bold mb-1 text-gray-800">🔍 The Mystery of h</h1>
+                <p class="text-gray-600">Why is the convection coefficient so complicated?</p>
+                <p class="text-sm text-gray-500 mt-2">Dr. Nuha AlJuneidi | Lawrence Technological University</p>
+            </div>
+            <div class="flex flex-col items-center ml-6">
+                <!-- SBED Lab Logo -->
+                <svg width="120" height="120" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="70" y="40" width="25" height="60" fill="#1e3a5f" stroke="#0ea5e9" stroke-width="3"/>
+                    <rect x="100" y="30" width="30" height="70" fill="#1e3a5f" stroke="#0ea5e9" stroke-width="3"/>
+                    <rect x="135" y="45" width="20" height="55" fill="#1e3a5f" stroke="#0ea5e9" stroke-width="3"/>
+                    <rect x="75" y="45" width="5" height="7" fill="white"/>
+                    <rect x="82" y="45" width="5" height="7" fill="white"/>
+                    <rect x="75" y="55" width="5" height="7" fill="white"/>
+                    <rect x="82" y="55" width="5" height="7" fill="white"/>
+                    <rect x="75" y="65" width="5" height="7" fill="white"/>
+                    <rect x="82" y="65" width="5" height="7" fill="white"/>
+                    <rect x="105" y="38" width="5" height="7" fill="white"/>
+                    <rect x="113" y="38" width="5" height="7" fill="white"/>
+                    <rect x="121" y="38" width="5" height="7" fill="white"/>
+                    <rect x="105" y="50" width="5" height="7" fill="white"/>
+                    <rect x="113" y="50" width="5" height="7" fill="white"/>
+                    <rect x="121" y="50" width="5" height="7" fill="white"/>
+                    <rect x="105" y="62" width="5" height="7" fill="white"/>
+                    <rect x="113" y="62" width="5" height="7" fill="white"/>
+                    <rect x="121" y="62" width="5" height="7" fill="white"/>
+                    <rect x="140" y="52" width="4" height="6" fill="white"/>
+                    <rect x="146" y="52" width="4" height="6" fill="white"/>
+                    <rect x="140" y="62" width="4" height="6" fill="white"/>
+                    <rect x="146" y="62" width="4" height="6" fill="white"/>
+                    <path d="M 30 110 Q 50 100 70 110 T 110 110 Q 130 100 150 110 T 190 110" 
+                          stroke="#0ea5e9" stroke-width="3" fill="none"/>
+                    <path d="M 30 117 Q 50 107 70 117 T 110 117 Q 130 107 150 117 T 190 117" 
+                          stroke="#0ea5e9" stroke-width="2" fill="none" opacity="0.7"/>
+                    <path d="M 30 124 Q 50 114 70 124 T 110 124 Q 130 114 150 124 T 190 124" 
+                          stroke="#10b981" stroke-width="2" fill="none" opacity="0.6"/>
+                    <circle cx="25" cy="60" r="6" fill="#0ea5e9"/>
+                    <circle cx="35" cy="70" r="4" fill="#0ea5e9"/>
+                    <circle cx="40" cy="55" r="4" fill="#0ea5e9"/>
+                    <line x1="25" y1="60" x2="35" y2="70" stroke="#0ea5e9" stroke-width="2"/>
+                    <line x1="25" y1="60" x2="40" y2="55" stroke="#0ea5e9" stroke-width="2"/>
+                    <circle cx="175" cy="65" r="4" fill="#10b981"/>
+                    <circle cx="183" cy="75" r="5" fill="#10b981"/>
+                    <circle cx="168" cy="80" r="4" fill="#10b981"/>
+                    <line x1="175" y1="65" x2="183" y2="75" stroke="#10b981" stroke-width="2"/>
+                </svg>
+                <div class="text-center mt-2">
+                    <div class="text-lg font-bold text-gray-700">SBED LAB</div>
+                    <div class="text-xs text-gray-600">Smart Building Energy Dynamics</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Introduction -->
+        <div class="mb-6 p-6 bg-purple-50 border-2 border-purple-300 rounded-lg">
+            <h2 class="text-xl font-bold mb-3 text-purple-800">🤔 The Big Mystery</h2>
+            <p class="text-base mb-2">Unlike thermal conductivity (k) which you can look up in a material properties table, 
+            the convection coefficient <strong>h is NOT a material property</strong>.</p>
+            <p class="text-base font-semibold text-purple-900">h depends on EVERYTHING about your situation!</p>
+            <p class="text-sm text-gray-700 mt-2">Explore below to see what controls h...</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Control Panel -->
+            <div class="lg:col-span-1 space-y-4">
+                <div class="p-4 bg-gray-50 rounded-lg border-2 border-gray-300">
+                    <h3 class="font-bold text-lg mb-4 text-center">🎛️ Adjust the Situation</h3>
+                    
+                    <!-- Velocity -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-1">
+                            Fluid Velocity: <span id="velocityValue" class="text-blue-600">1.0</span> m/s
+                        </label>
+                        <input type="range" id="velocity" min="0.1" max="10" step="0.1" value="1" 
+                               class="w-full" oninput="updateH()">
+                        <p class="text-xs text-gray-600 mt-1">Higher velocity → higher h</p>
+                    </div>
+
+                    <!-- Fluid Type -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-1">Fluid Type:</label>
+                        <select id="fluidType" class="w-full border rounded px-2 py-1" onchange="updateH()">
+                            <option value="air">Air</option>
+                            <option value="water">Water</option>
+                            <option value="oil">Oil</option>
+                        </select>
+                        <p class="text-xs text-gray-600 mt-1">Different fluids → different h</p>
+                    </div>
+
+                    <!-- Flow Regime -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-1">Flow Regime:</label>
+                        <select id="flowRegime" class="w-full border rounded px-2 py-1" onchange="updateH()">
+                            <option value="laminar">Laminar</option>
+                            <option value="turbulent">Turbulent</option>
+                        </select>
+                        <p class="text-xs text-gray-600 mt-1">Turbulent → much higher h</p>
+                    </div>
+
+                    <!-- Geometry -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-1">Geometry:</label>
+                        <select id="geometry" class="w-full border rounded px-2 py-1" onchange="updateH()">
+                            <option value="plate">Flat Plate</option>
+                            <option value="cylinder">Cylinder</option>
+                            <option value="sphere">Sphere</option>
+                        </select>
+                        <p class="text-xs text-gray-600 mt-1">Shape matters!</p>
+                    </div>
+
+                    <!-- Orientation (for natural convection) -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-1">Orientation:</label>
+                        <select id="orientation" class="w-full border rounded px-2 py-1" onchange="updateH()">
+                            <option value="horizontal_up">Horizontal (Hot side up)</option>
+                            <option value="horizontal_down">Horizontal (Hot side down)</option>
+                            <option value="vertical">Vertical</option>
+                        </select>
+                        <p class="text-xs text-gray-600 mt-1">Gravity direction matters!</p>
+                    </div>
+
+                    <!-- Surface Condition -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-1">Surface:</label>
+                        <select id="surface" class="w-full border rounded px-2 py-1" onchange="updateH()">
+                            <option value="smooth">Smooth</option>
+                            <option value="rough">Rough</option>
+                        </select>
+                        <p class="text-xs text-gray-600 mt-1">Rough → higher h</p>
+                    </div>
+
+                    <!-- Characteristic Length -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-1">
+                            Length Scale: <span id="lengthValue" class="text-blue-600">0.5</span> m
+                        </label>
+                        <input type="range" id="length" min="0.1" max="2" step="0.1" value="0.5" 
+                               class="w-full" oninput="updateH()">
+                        <p class="text-xs text-gray-600 mt-1">Size affects h</p>
+                    </div>
+
+                    <button onclick="randomizeAll()" 
+                            class="w-full mt-4 px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 font-semibold">
+                        🎲 Randomize All
+                    </button>
+                </div>
+            </div>
+
+            <!-- Visualization and Results -->
+            <div class="lg:col-span-2 space-y-4">
+                <!-- Current h Display -->
+                <div class="p-6 bg-gradient-to-br from-purple-100 to-blue-100 rounded-lg border-4 border-purple-400 text-center">
+                    <h3 class="text-xl font-bold mb-2">Current Convection Coefficient:</h3>
+                    <div class="h-display" id="hDisplay">125</div>
+                    <div class="text-lg font-semibold text-gray-700">W/m²·K</div>
+                    <div class="mt-4 p-3 bg-white rounded-lg">
+                        <p class="text-sm font-semibold text-purple-900">Heat Flux:</p>
+                        <p class="text-2xl font-bold text-purple-700" id="heatFluxDisplay">6,250 W/m²</p>
+                        <p class="text-xs text-gray-600">q = h × A × ΔT (assuming A=1m², ΔT=50K)</p>
+                    </div>
+                </div>
+
+                <!-- Visual Representation -->
+                <div class="p-4 bg-gray-50 rounded-lg border-2 border-gray-300">
+                    <h3 class="font-semibold mb-2 text-center">Flow Visualization</h3>
+                    <div class="relative h-64 bg-gradient-to-b from-gray-200 to-gray-100 rounded-lg overflow-hidden" id="flowViz">
+                        <!-- Hot surface at bottom -->
+                        <div class="absolute bottom-0 w-full h-12 hot-surface flex items-center justify-center">
+                            <span class="text-white font-bold text-sm">Hot Surface (80°C)</span>
+                        </div>
+                        <!-- Particles will be added here dynamically -->
+                    </div>
+                    <div class="mt-2 text-center">
+                        <p class="text-sm font-semibold">Boundary Layer Thickness: <span id="boundaryLayer">--</span> mm</p>
+                        <p class="text-xs text-gray-600">Thinner boundary layer → Higher h</p>
+                    </div>
+                </div>
+
+                <!-- Explanation Panel -->
+                <div class="p-4 bg-yellow-50 rounded-lg border-2 border-yellow-400">
+                    <h3 class="font-bold text-lg mb-2">🔑 The Key Insight:</h3>
+                    <div class="text-sm space-y-2">
+                        <p><strong>h is NOT a material property!</strong></p>
+                        <p>h depends on:</p>
+                        <ul class="list-disc ml-6 space-y-1">
+                            <li>Fluid velocity</li>
+                            <li>Fluid type (properties: ρ, μ, cp, k)</li>
+                            <li>Flow regime (laminar vs turbulent)</li>
+                            <li>Geometry shape and size</li>
+                            <li>Orientation (gravity effects)</li>
+                            <li>Surface condition</li>
+                        </ul>
+                        <p class="mt-3 font-semibold text-yellow-900">That's why engineers must CALCULATE h, not look it up!</p>
+                    </div>
+                </div>
+
+                <!-- How h is Found -->
+                <div class="p-4 bg-blue-50 rounded-lg border-2 border-blue-400">
+                    <h3 class="font-bold text-lg mb-2">🧮 How Engineers Find h:</h3>
+                    <div class="text-sm space-y-2">
+                        <p>Step 1: Calculate Reynolds number (Re) - depends on velocity, size, fluid</p>
+                        <p>Step 2: Calculate Prandtl number (Pr) - depends on fluid properties</p>
+                        <p>Step 3: Use correlation to find Nusselt number (Nu):</p>
+                        <div class="bg-white p-2 rounded font-mono text-xs my-2">
+                            Nu = C × Re^m × Pr^n
+                        </div>
+                        <p>Step 4: Calculate h from Nu:</p>
+                        <div class="bg-white p-2 rounded font-mono text-xs my-2">
+                            h = Nu × k_fluid / L
+                        </div>
+                        <p class="mt-3 font-semibold text-blue-900">Different situation → Different Re, Nu → Different h!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Chart -->
+        <div class="mt-6 p-4 bg-gray-50 rounded-lg border-2 border-gray-300">
+            <h3 class="font-bold text-xl mb-4 text-center">📊 Typical h Ranges</h3>
+            <p class="text-sm text-center text-gray-600 mb-4">Notice how h can vary by <strong>20,000×</strong> depending on the situation!</p>
+            
+            <div class="space-y-2">
+                <div class="flex items-center gap-2">
+                    <div class="w-48 text-sm font-semibold">Natural conv. - Air:</div>
+                    <div class="flex-1 bg-gray-200 h-6 rounded relative">
+                        <div class="bg-blue-400 h-6 rounded absolute" style="width: 1%"></div>
+                    </div>
+                    <div class="w-32 text-sm text-right">5-25 W/m²·K</div>
+                </div>
+                
+                <div class="flex items-center gap-2">
+                    <div class="w-48 text-sm font-semibold">Forced conv. - Air:</div>
+                    <div class="flex-1 bg-gray-200 h-6 rounded relative">
+                        <div class="bg-blue-500 h-6 rounded absolute" style="width: 2%"></div>
+                    </div>
+                    <div class="w-32 text-sm text-right">10-200 W/m²·K</div>
+                </div>
+                
+                <div class="flex items-center gap-2">
+                    <div class="w-48 text-sm font-semibold">Natural conv. - Water:</div>
+                    <div class="flex-1 bg-gray-200 h-6 rounded relative">
+                        <div class="bg-green-500 h-6 rounded absolute" style="width: 5%"></div>
+                    </div>
+                    <div class="w-32 text-sm text-right">100-600 W/m²·K</div>
+                </div>
+                
+                <div class="flex items-center gap-2">
+                    <div class="w-48 text-sm font-semibold">Forced conv. - Water:</div>
+                    <div class="flex-1 bg-gray-200 h-6 rounded relative">
+                        <div class="bg-green-600 h-6 rounded absolute" style="width: 15%"></div>
+                    </div>
+                    <div class="w-32 text-sm text-right">300-10,000 W/m²·K</div>
+                </div>
+                
+                <div class="flex items-center gap-2">
+                    <div class="w-48 text-sm font-semibold">Boiling Water:</div>
+                    <div class="flex-1 bg-gray-200 h-6 rounded relative">
+                        <div class="bg-red-600 h-6 rounded absolute" style="width: 100%"></div>
+                    </div>
+                    <div class="w-32 text-sm text-right">3,000-100,000 W/m²·K</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Section -->
+        <div class="mt-6 p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border-2 border-purple-400">
+            <h3 class="font-bold text-xl mb-4 text-center">✅ Test Your Understanding</h3>
+            
+            <div class="bg-white p-4 rounded-lg mb-4">
+                <p class="font-semibold mb-3">Scenario: An engineer tells you "The convection coefficient is 50 W/m²·K"</p>
+                <p class="mb-3">What should you ask them?</p>
+                
+                <div class="space-y-2">
+                    <button onclick="checkAnswer('wrong1')" id="btn-wrong1" 
+                            class="w-full text-left p-3 border-2 border-gray-300 rounded hover:bg-gray-50">
+                        A) What material is the surface made of?
+                    </button>
+                    <button onclick="checkAnswer('correct')" id="btn-correct" 
+                            class="w-full text-left p-3 border-2 border-gray-300 rounded hover:bg-gray-50">
+                        B) What fluid, what velocity, what geometry?
+                    </button>
+                    <button onclick="checkAnswer('wrong2')" id="btn-wrong2" 
+                            class="w-full text-left p-3 border-2 border-gray-300 rounded hover:bg-gray-50">
+                        C) What is the thermal conductivity?
+                    </button>
+                </div>
+                
+                <div id="quizFeedback" class="mt-4 hidden"></div>
+            </div>
+
+            <div class="text-center text-sm text-gray-700">
+                <p class="font-semibold">Remember: h is NOT a material property!</p>
+                <p>It's a property of the entire heat transfer SITUATION.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let particles = [];
+        let animationId = null;
+
+        // Fluid properties database
+        const fluidProps = {
+            air: { name: 'Air', k: 0.026, nu: 15.7e-6, Pr: 0.71, density: 1.2, baseH: 10 },
+            water: { name: 'Water', k: 0.6, nu: 1e-6, Pr: 7, density: 1000, baseH: 500 },
+            oil: { name: 'Oil', k: 0.15, nu: 50e-6, Pr: 500, density: 900, baseH: 100 }
+        };
+
+        function updateH() {
+            const velocity = parseFloat(document.getElementById('velocity').value);
+            const fluidType = document.getElementById('fluidType').value;
+            const flowRegime = document.getElementById('flowRegime').value;
+            const geometry = document.getElementById('geometry').value;
+            const orientation = document.getElementById('orientation').value;
+            const surface = document.getElementById('surface').value;
+            const length = parseFloat(document.getElementById('length').value);
+
+            document.getElementById('velocityValue').textContent = velocity.toFixed(1);
+            document.getElementById('lengthValue').textContent = length.toFixed(1);
+
+            // Calculate h based on conditions
+            const fluid = fluidProps[fluidType];
+            let h = fluid.baseH;
+
+            // Velocity effect (approximately proportional to v^0.5 for laminar, v^0.8 for turbulent)
+            if (flowRegime === 'laminar') {
+                h *= Math.pow(velocity, 0.5);
+            } else {
+                h *= Math.pow(velocity, 0.8) * 1.5; // Turbulent is higher
+            }
+
+            // Geometry effect
+            const geomFactors = { plate: 1.0, cylinder: 0.8, sphere: 0.7 };
+            h *= geomFactors[geometry];
+
+            // Orientation effect (mainly for low velocity/natural convection)
+            if (velocity < 0.5) {
+                const orientFactors = { horizontal_up: 1.2, horizontal_down: 0.6, vertical: 1.0 };
+                h *= orientFactors[orientation];
+            }
+
+            // Surface roughness effect
+            if (surface === 'rough') {
+                h *= 1.3;
+            }
+
+            // Length scale effect (h decreases with length for flat plate)
+            if (geometry === 'plate') {
+                h *= Math.pow(0.5 / length, 0.2);
+            }
+
+            // Display results
+            const hRounded = Math.round(h);
+            document.getElementById('hDisplay').textContent = hRounded;
+            
+            // Calculate heat flux (assuming A=1m², ΔT=50K)
+            const heatFlux = Math.round(h * 1 * 50);
+            document.getElementById('heatFluxDisplay').textContent = heatFlux.toLocaleString() + ' W/m²';
+
+            // Boundary layer thickness (inversely proportional to h)
+            const boundaryLayer = (100 / h * 10).toFixed(1);
+            document.getElementById('boundaryLayer').textContent = boundaryLayer;
+
+            // Update visualization
+            updateVisualization(velocity, h);
+        }
+
+        function updateVisualization(velocity, h) {
+            const container = document.getElementById('flowViz');
+            
+            // Clear existing particles
+            particles.forEach(p => p.element.remove());
+            particles = [];
+
+            // Create new particles based on velocity
+            const numParticles = Math.floor(velocity * 20 + 10);
+            const particleSpeed = velocity * 5 + 2;
+
+            for (let i = 0; i < numParticles; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.bottom = Math.random() * 50 + 60 + 'px';
+                container.appendChild(particle);
+
+                particles.push({
+                    element: particle,
+                    x: Math.random() * container.clientWidth,
+                    y: Math.random() * 150 + 60,
+                    speed: particleSpeed * (0.8 + Math.random() * 0.4)
+                });
+            }
+
+            // Animate particles
+            if (animationId) cancelAnimationFrame(animationId);
+            animateParticles(container);
+        }
+
+        function animateParticles(container) {
+            particles.forEach(p => {
+                p.x += p.speed;
+                if (p.x > container.clientWidth) {
+                    p.x = -10;
+                    p.y = Math.random() * 150 + 60;
+                }
+                p.element.style.left = p.x + 'px';
+                p.element.style.bottom = p.y + 'px';
+            });
+
+            animationId = requestAnimationFrame(() => animateParticles(container));
+        }
+
+        function randomizeAll() {
+            document.getElementById('velocity').value = (Math.random() * 9.9 + 0.1).toFixed(1);
+            document.getElementById('fluidType').value = ['air', 'water', 'oil'][Math.floor(Math.random() * 3)];
+            document.getElementById('flowRegime').value = Math.random() > 0.5 ? 'turbulent' : 'laminar';
+            document.getElementById('geometry').value = ['plate', 'cylinder', 'sphere'][Math.floor(Math.random() * 3)];
+            document.getElementById('orientation').value = ['horizontal_up', 'horizontal_down', 'vertical'][Math.floor(Math.random() * 3)];
+            document.getElementById('surface').value = Math.random() > 0.5 ? 'rough' : 'smooth';
+            document.getElementById('length').value = (Math.random() * 1.9 + 0.1).toFixed(1);
+            updateH();
+        }
+
+        function checkAnswer(answer) {
+            const feedback = document.getElementById('quizFeedback');
+            feedback.classList.remove('hidden');
+
+            // Reset all buttons
+            ['btn-wrong1', 'btn-correct', 'btn-wrong2'].forEach(id => {
+                document.getElementById(id).className = 'w-full text-left p-3 border-2 border-gray-300 rounded hover:bg-gray-50';
+            });
+
+            if (answer === 'correct') {
+                document.getElementById('btn-correct').className = 'w-full text-left p-3 border-4 border-green-500 bg-green-100 rounded';
+                feedback.className = 'mt-4 p-4 bg-green-100 border-2 border-green-500 rounded-lg';
+                feedback.innerHTML = `
+                    <p class="font-bold text-green-800 mb-2">✓ Correct!</p>
+                    <p class="text-sm">h depends on the fluid type, velocity, geometry, and many other factors about the SITUATION - not the surface material!</p>
+                `;
+            } else {
+                document.getElementById('btn-' + answer).className = 'w-full text-left p-3 border-4 border-red-500 bg-red-100 rounded';
+                feedback.className = 'mt-4 p-4 bg-red-100 border-2 border-red-500 rounded-lg';
+                feedback.innerHTML = `
+                    <p class="font-bold text-red-800 mb-2">✗ Not quite!</p>
+                    <p class="text-sm">h is NOT a material property! It depends on the fluid, velocity, geometry, and flow conditions - the entire heat transfer situation.</p>
+                `;
+            }
+        }
+
+        // Initialize
+        updateH();
+    </script>
+</body>
+</html>
