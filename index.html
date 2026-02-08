@@ -393,12 +393,13 @@
             document.getElementById('hDisplay').textContent = hRounded;
             
             // Calculate heat flux (assuming A=1m², ΔT=50K)
-            const heatFlux = Math.round(h * 1 * 50);
+            const heatFlux = hRounded * 50; // q'' = h × ΔT, ΔT = 50 K
             document.getElementById('heatFluxDisplay').textContent = heatFlux.toLocaleString() + ' W/m²';
 
             // Boundary layer thickness (inversely proportional to h)
-            const boundaryLayer = (100 / h * 10).toFixed(1);
-            document.getElementById('boundaryLayer').textContent = boundaryLayer;
+            let boundaryLayerMm = 1000 / h;                // simple visual indicator
+            boundaryLayerMm = Math.max(0.5, Math.min(boundaryLayerMm, 50)); // clamp 0.5–50 mm
+            document.getElementById('boundaryLayer').textContent = boundaryLayerMm.toFixed(1);
 
             // Update visualization
             updateVisualization(velocity, h);
