@@ -356,6 +356,11 @@
 
             document.getElementById('velocityValue').textContent = velocity.toFixed(1);
             document.getElementById('lengthValue').textContent = length.toFixed(1);
+            // Enable/disable Orientation depending on whether it affects h
+            const orientationSelect = document.getElementById('orientation');
+            const orientationActive = velocity < 0.5;
+            orientationSelect.disabled = !orientationActive;
+            orientationSelect.classList.toggle('opacity-50', !orientationActive);
 
             // Calculate h based on conditions
             const fluid = fluidProps[fluidType];
