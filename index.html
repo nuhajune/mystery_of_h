@@ -135,7 +135,11 @@
                             <option value="laminar">Laminar</option>
                             <option value="turbulent">Turbulent</option>
                         </select>
-                        <p class="text-xs text-gray-600 mt-1">Turbulent → much higher h</p>
+                        <p class="text-xs text-gray-600 mt-1">
+                            Auto-selected from Re:
+                            <span id="regimeNote" class="font-semibold text-gray-800">--</span>
+                        </p>
+
                     </div>
 
                     <!-- Geometry -->
@@ -176,7 +180,7 @@
                             Length Scale: <span id="lengthValue" class="text-blue-600">0.5</span> m
                         </label>
                         <input type="range" id="length" min="0.1" max="2" step="0.1" value="0.5" 
-                               class="w-full" oninput="updateH()">
+                               oninput="scheduleUpdateH()"
                         <p class="text-xs text-gray-600 mt-1">Size affects h</p>
                     </div>
                     <!-- Temperature Difference -->
@@ -397,6 +401,12 @@
             let regimeAuto = (Re < 5e5) ? 'laminar' : 'turbulent'; // flat plate-ish threshold
             document.getElementById('flowRegime').value = regimeAuto;
             flowRegime = regimeAuto;
+            const flowEl = document.getElementById('flowRegime');
+            flowEl.disabled = true;
+            flowEl.classList.add('opacity-50');
+            const noteEl = document.getElementById('regimeNote');
+            if (noteEl) noteEl.textContent = `Re = ${Re.toExponential(2)} → ${regimeAuto}`;
+
 
 
             let h = fluid.baseH;
