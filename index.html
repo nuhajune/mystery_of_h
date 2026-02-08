@@ -248,8 +248,10 @@
                 <div class="p-4 bg-blue-50 rounded-lg border-2 border-blue-400">
                     <h3 class="font-bold text-lg mb-2">🧮 How Engineers Find h:</h3>
                     <div class="text-sm space-y-2">
-                        <p>Step 1: Calculate Reynolds number (Re) - depends on velocity, size, fluid:
-                            <span id="reDisplay" class="font-bold text-blue-700">--</span></p>
+                        <p>
+                            Step 1: Calculate Reynolds number (Re) - depends on velocity, size, fluid:
+                            <span id="reDisplay" class="font-bold text-blue-700">--</span>
+                        </p>
                         <p>Step 2: Calculate Prandtl number (Pr) - depends on fluid properties</p>
                         <p>Step 3: Use correlation to find Nusselt number (Nu):</p>
                         <div class="bg-white p-2 rounded font-mono text-xs my-2">
@@ -389,7 +391,9 @@
             const fluid = fluidProps[fluidType];
             // Reynolds number: Re = V * L / nu
             const Re = velocity * length / fluid.nu;
-            document.getElementById('reDisplay').textContent = Re.toExponential(2);
+            const reEl = document.getElementById('reDisplay');
+            if (reEl) reEl.textContent = Re.toExponential(2);
+
 
             let h = fluid.baseH;
 
