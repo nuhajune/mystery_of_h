@@ -368,7 +368,7 @@
         function updateH() {
             const velocity = parseFloat(document.getElementById('velocity').value);
             const fluidType = document.getElementById('fluidType').value;
-            const flowRegime = document.getElementById('flowRegime').value;
+            let flowRegime = document.getElementById('flowRegime').value;
             const geometry = document.getElementById('geometry').value;
             const orientation = document.getElementById('orientation').value;
             const surface = document.getElementById('surface').value;
@@ -393,6 +393,10 @@
             const Re = velocity * length / fluid.nu;
             const reEl = document.getElementById('reDisplay');
             if (reEl) reEl.textContent = Re.toExponential(2);
+            // Auto flow regime based on Reynolds number (simple teaching rule)
+            let regimeAuto = (Re < 5e5) ? 'laminar' : 'turbulent'; // flat plate-ish threshold
+            document.getElementById('flowRegime').value = regimeAuto;
+            flowRegime = regimeAuto;
 
 
             let h = fluid.baseH;
