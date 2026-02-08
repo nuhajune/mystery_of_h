@@ -375,6 +375,9 @@
 
             document.getElementById('velocityValue').textContent = velocity.toFixed(1);
             document.getElementById('lengthValue').textContent = length.toFixed(1);
+            document.getElementById('deltaTValue').textContent = deltaT.toFixed(0);
+            document.getElementById('deltaTText').textContent = deltaT.toFixed(0);
+
             // Enable/disable Orientation depending on whether it affects h
             const orientationSelect = document.getElementById('orientation');
             const orientationActive = velocity < 0.5;
@@ -417,7 +420,7 @@
             document.getElementById('hDisplay').textContent = hRounded;
             
             // Calculate heat flux (assuming A=1m², ΔT=50K)
-            const heatFlux = hRounded * deltaT; // q'' = h × ΔT, ΔT = 50 K
+            const heatFlux = hRounded * deltaT; // q'' = h × ΔT
             document.getElementById('heatFluxDisplay').textContent = heatFlux.toLocaleString() + ' W/m²';
 
             // Boundary layer thickness (inversely proportional to h)
