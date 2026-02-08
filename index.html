@@ -16,10 +16,12 @@
             height: 4px;
             background-color: #3b82f6;
             border-radius: 50%;
+            animation: pulse 1s infinite;
             opacity: 0.6;
         }
         .hot-surface {
             background: linear-gradient(to right, #ef4444, #f97316);
+            animation: pulse 1.5s infinite;
         }
         @keyframes pulse {
             0%, 100% { opacity: 0.6; }
@@ -177,6 +179,15 @@
                                class="w-full" oninput="updateH()">
                         <p class="text-xs text-gray-600 mt-1">Size affects h</p>
                     </div>
+                    <!-- Temperature Difference -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold mb-1">
+                            Temperature Difference (ΔT): <span id="deltaTValue" class="text-blue-600">50</span> K
+                        </label>
+                        <input type="range" id="deltaT" min="5" max="100" step="1" value="50"
+                            class="w-full" oninput="scheduleUpdateH()">
+                        <p class="text-xs text-gray-600 mt-1">Bigger ΔT → bigger heat flux</p>
+                    </div>
 
                     <button onclick="randomizeAll()" 
                             class="w-full mt-4 px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 font-semibold">
@@ -195,7 +206,7 @@
                     <div class="mt-4 p-3 bg-white rounded-lg">
                         <p class="text-sm font-semibold text-purple-900">Heat Flux:</p>
                         <p class="text-2xl font-bold text-purple-700" id="heatFluxDisplay">6,250 W/m²</p>
-                        <p class="text-xs text-gray-600">q'' = h × ΔT (assuming ΔT = 50 K)</p>
+                        <p class="text-xs text-gray-600">q'' = h × ΔT (ΔT = <span id="deltaTText">50</span> K)</p>
                     </div>
                 </div>
 
@@ -359,6 +370,8 @@
             const orientation = document.getElementById('orientation').value;
             const surface = document.getElementById('surface').value;
             const length = parseFloat(document.getElementById('length').value);
+            const deltaT = parseFloat(document.getElementById('deltaT').value);
+
 
             document.getElementById('velocityValue').textContent = velocity.toFixed(1);
             document.getElementById('lengthValue').textContent = length.toFixed(1);
