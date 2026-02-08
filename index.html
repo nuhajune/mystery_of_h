@@ -417,7 +417,7 @@
             document.getElementById('hDisplay').textContent = hRounded;
             
             // Calculate heat flux (assuming A=1m², ΔT=50K)
-            const heatFlux = hRounded * 50; // q'' = h × ΔT, ΔT = 50 K
+            const heatFlux = hRounded * deltaT; // q'' = h × ΔT, ΔT = 50 K
             document.getElementById('heatFluxDisplay').textContent = heatFlux.toLocaleString() + ' W/m²';
 
             // Boundary layer thickness (inversely proportional to h)
